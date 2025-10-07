@@ -11,13 +11,16 @@ ENV APP_PORT=9000
 
 USER root
 
-RUN mkdir -p /vol/static && \
-    chmod 755 /vol/static && \
+RUN mkdir -p /vol/{static,media} && \
+    chmod 755 /vol && \
+    chown -R nginx:nginx /vol && \
     touch /etc/nginx/conf.d/default.conf && \
     chown nginx:nginx /etc/nginx/conf.d/default.conf && \
     chmod +x /run.sh
 
-VOLUME /vol/static
+# name the volumes for ECS
+VOLUME /vol/static/
+VOLUME /vol/media/
 
 USER nginx
 

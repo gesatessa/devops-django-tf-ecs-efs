@@ -3,6 +3,8 @@ LABEL maintainer="gesatessa"
 
 ENV PYTHONUNBUFFERED 1
 
+ARG UID=101
+
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./scripts /scripts
@@ -23,16 +25,22 @@ RUN python -m venv /py && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
     adduser \
+        # uid must be specified to match host user id for file permissions (in EFS volume)
+        # --uid $UID \
         --disabled-password \
         --no-create-home \
         django-user && \
     mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
-    chown -R django-user:django-user /vol && \
+    chown -R django-user:django-user /vol/web && \
     chmod -R 755 /vol && \
     chmod -R +x /scripts
 
 ENV PATH="/scripts:/py/bin:$PATH"
+
+# For ECS deployment, apparently volumes must be defined in the Dockerfile.
+# VOLUME /vol/web/media
+# VOLUME /vol/web/static
 
 USER django-user
 
