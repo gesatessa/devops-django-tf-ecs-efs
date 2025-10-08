@@ -28,3 +28,7 @@ provider "aws" {
     }
   }
 }
+
+locals {
+  prefix = var.project_name
+}

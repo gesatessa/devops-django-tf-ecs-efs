@@ -7,13 +7,13 @@ terraform {
   }
 
   backend "s3" {
-    bucket               = "django-devops-recipe-state-bucket"
-    key                  = "deploy"
-    region               = "us-east-1"
-    dynamodb_table       = "django-devops-recipe-lock-tbl"
-    encrypt              = true
+    bucket         = "django-devops-recipe-state-bucket"
+    key            = "deploy"
+    region         = "us-east-1"
+    dynamodb_table = "django-devops-recipe-lock-tbl"
+    encrypt        = true
     workspace_key_prefix = "tf-state-deploy"
-
+    
   }
 }
 
@@ -29,7 +29,7 @@ provider "aws" {
       ManagedBy   = "Terraform/deploy"
     }
   }
-
+  
 }
 
 locals {
@@ -37,4 +37,4 @@ locals {
 }
 
 # data "aws_regions" "available" {}
-# data "aws_region" "current" {}
+data "aws_region" "current" {}
